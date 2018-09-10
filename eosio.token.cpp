@@ -65,8 +65,9 @@ void token::transfer( account_name from,
                       string       memo )
 {
     eosio_assert( from != to, "cannot transfer to self" );
-    require_auth( from );
+    //require_auth( from );
     eosio_assert( is_account( to ), "to account does not exist");
+  
     auto sym = quantity.symbol.name();
     stats statstable( _self, sym );
     const auto& st = statstable.get( sym );
@@ -82,6 +83,40 @@ void token::transfer( account_name from,
 
     sub_balance( from, quantity );
     add_balance( to, quantity, from );
+}
+  
+void token::transfer2( account_name from,
+                      account_name to,
+                      asset        quantity,
+                      string       memo )
+{
+    eosio_assert( from != to, "cannot transfer to self" );
+    require_auth( from );
+    eosio_assert( is_account( to ), "to account does not exist");
+  
+    auto sym = quantity.symbol.name();
+    stats statstable( _self, sym );
+    const auto& st = statstable.get( sym );
+
+    require_recipient( from );
+    require_recipient( to );
+
+    eosio_assert( quantity.is_valid(), "invalid quantity" );
+    eosio_assert( quantity.amount > 0, "must transfer positive quantity" );
+    eosio_assert( quantity.symbol == st.supply.symbol, "symbol precision mismatch" );
+    eosio_assert( memo.size() <= 256, "memo has more than 256 bytes" );
+
+
+    sub_balance( from, quantity );
+    add_balance( to, quantity, from );
+}
+  
+void token::lock( account name user, uint32_t timestamp){
+      lockup lockuptable( _self, timestamp );
+      lockuptable.emplace( _self, [&]( auto& s ) {
+       s.user = user;
+       s.timestamp    = timestamp;
+    });
 }
 
 void token::sub_balance( account_name owner, asset value ) {
