@@ -55,7 +55,7 @@ namespace eosio {
 // @abi table lockup i64
         struct lockup_list {
            uint64_t id;
-           account_name from;
+           account_name user;
            uint64_t amount;
            uint32_t timestamp;
            
