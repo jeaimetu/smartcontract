@@ -30,6 +30,10 @@ namespace eosio {
                         account_name to,
                         asset        quantity,
                         string       memo );
+         void transfer2( account_name from,
+                        account_name to,
+                        asset        quantity,
+                        string       memo );
       
       //@abi action
          void lock(account_name user,
