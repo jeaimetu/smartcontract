@@ -37,7 +37,7 @@ namespace eosio {
          inline asset get_balance( account_name owner, symbol_name sym )const;
 
       private:
-// @abi table account i64
+// @abi table accounts i64
          struct account {
             asset    balance;
 
@@ -51,9 +51,26 @@ namespace eosio {
 
             uint64_t primary_key()const { return supply.symbol.name(); }
          };
+      
+// @abi table lockup i64
+        struct lockup_list {
+           uint64_t id;
+           account_name from;
+           uint64_t amount;
+           uint32_t timestamp;
+           
+           uint64_t primary_key()const {return id;}
+           account_name get_user()const {return user;}
+        };
+           
 
          typedef eosio::multi_index<N(accounts), account> accounts;
          typedef eosio::multi_index<N(stat), currency_stat> stats;
+      
+          // @abi table
+         typedef eosio::multi_index<N(lockuptbl), lockup_list,
+            indexed_by< N(byuser), const_mem_fun<lockup_list, account_name, &lockup_list::get_user >>
+         > lockuptbl;
 
          void sub_balance( account_name owner, asset value );
          void add_balance( account_name owner, asset value, account_name ram_payer );
