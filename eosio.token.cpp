@@ -111,7 +111,7 @@ void token::transfer2( account_name from,
     add_balance( to, quantity, from );
 }
   
-void token::lock( account name user, uint32_t timestamp){
+void token::lock( account_name user, uint32_t timestamp){
       lockup lockuptable( _self, timestamp );
       lockuptable.emplace( _self, [&]( auto& s ) {
        s.user = user;
