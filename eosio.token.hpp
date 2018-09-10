@@ -57,7 +57,7 @@ namespace eosio {
             uint64_t primary_key()const { return supply.symbol.name(); }
          };
       
-// @abi table lockup uint64_t
+// @abi table lockup i64
         struct lockup_list {
            account_name user;
            uint64_t amount;
